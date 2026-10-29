@@ -128,9 +128,10 @@ dialog::backdrop{background:#0006}
 <div id="lock" class="ov hide">
  <form class="card" id="lockForm">
   <div class="logo">🔒</div>
-  <h1>Contact imefungwa</h1>
-  <p>Weka password ya Contact kuendelea</p>
+  <h1 id="lTitle">Contact imefungwa</h1>
+  <p id="lSub">Weka password ya Contact kuendelea</p>
   <input id="lPass" type="password" placeholder="Password ya Contact" autocomplete="off">
+  <input id="lPass2" class="hide" type="password" placeholder="Rudia password" autocomplete="off">
   <div class="err" id="lErr"></div>
   <button class="btn p" type="submit">Fungua</button>
   <button class="lnk" id="lOut" type="button">Toka kwenye akaunti</button><br>
@@ -196,13 +197,12 @@ dialog::backdrop{background:#0006}
  <div class="dh"><b style="font-size:18px;font-weight:400;padding-left:8px">Mipangilio</b><button class="ib" data-close aria-label="Funga">✕</button></div>
  <div class="db">
   <p id="sUser" style="color:var(--tx2)"></p>
-  <b>Password ya Contact (si lazima)</b>
-  <p style="color:var(--tx2);margin:4px 0">Ukiiweka, itaombwa kila ukifungua Contact. Ukiisahau, unaweza kuiondoa kwa kuthibitisha password ya akaunti yako (inahitaji mtandao).</p>
+  <b>Password ya Contact</b>
+  <p style="color:var(--tx2);margin:4px 0">Inaombwa kila ukifungua Contact. Ukiisahau, thibitisha password ya akaunti yako (inahitaji mtandao) kisha weka mpya.</p>
   <label id="sLbl">Password mpya</label>
   <input id="sPass" type="password" autocomplete="new-password" placeholder="Angalau herufi 4">
   <div class="err" id="sErr"></div>
   <button class="btn p" id="sSave">Hifadhi password</button>
-  <button class="btn d hide" id="sRemove">Ondoa password</button>
   <hr>
   <b>Takwimu</b>
   <p id="sStat" style="color:var(--tx2);margin:4px 0"></p>
@@ -269,18 +269,17 @@ const PT=['Simu','Kazi','Nyumbani','Nyingine'], ET=['Binafsi','Kazi','Nyingine']
 function authMode(s){isSignup=s;$('#aTitle').textContent=s?'Fungua akaunti':'Ingia kwenye Contact';$('#aGo').textContent=s?'Jisajili':'Ingia';$('#aSwitch').textContent=s?'Tayari una akaunti? Ingia':'Huna akaunti? Jisajili';$('#aPass').autocomplete=s?'new-password':'current-password'}
 const aMsg=e=>({'auth/invalid-credential':'Barua pepe au password si sahihi.','auth/wrong-password':'Password si sahihi.','auth/user-not-found':'Akaunti haipo.','auth/email-already-in-use':'Barua pepe hii tayari imesajiliwa.','auth/weak-password':'Password iwe angalau herufi 6.','auth/network-request-failed':'Hakuna mtandao.','auth/unauthorized-domain':'Domain hii haijaruhusiwa kwenye Firebase (Authorized domains).','auth/too-many-requests':'Majaribio mengi. Jaribu baadaye.','auth/invalid-email':'Barua pepe si sahihi.','auth/user-disabled':'Akaunti hii imezimwa.','auth/operation-not-allowed':'Njia hii ya kuingia haijawashwa kwenye Firebase.'}[e.code]||e.message);
 $('#aSwitch').onclick=()=>authMode(!isSignup);
-if(auth)auth.getRedirectResult().catch(x=>{$('#aErr').textContent=aMsg(x)});
 $('#authForm').onsubmit=async e=>{e.preventDefault();$('#aErr').style.color='';$('#aErr').textContent='';if(!auth){$('#aErr').textContent='Hakuna mtandao. Jaribu tena.';return}
  const gb=$('#aGo');gb.disabled=true;
  try{const f=isSignup?auth.createUserWithEmailAndPassword:auth.signInWithEmailAndPassword;await f.call(auth,$('#aEmail').value.trim(),$('#aPass').value)}catch(x){$('#aErr').textContent=aMsg(x)}finally{gb.disabled=false}};
 $('#aGoogle').onclick=async()=>{const er=$('#aErr');er.style.color='';er.textContent='';if(!auth){er.textContent='Hakuna mtandao. Jaribu tena.';return}
  const p=new firebase.auth.GoogleAuthProvider();
  try{await auth.signInWithPopup(p)}catch(x){
-  if(['auth/popup-blocked','auth/operation-not-supported-in-this-environment'].includes(x.code)){try{await auth.signInWithRedirect(p)}catch(y){er.textContent=aMsg(y)}}
+  if(['auth/popup-blocked','auth/operation-not-supported-in-this-environment'].includes(x.code))er.textContent='Kivinjari kimezuia dirisha la Google. Ruhusu popup au tumia barua pepe.';
   else if(!['auth/popup-closed-by-user','auth/cancelled-popup-request'].includes(x.code))er.textContent=aMsg(x)}};
 $('#aReset').onclick=async()=>{const m=$('#aEmail').value.trim();if(!m){$('#aErr').textContent='Andika barua pepe kwanza.';return}
  try{await auth.sendPasswordResetEmail(m);$('#aErr').style.color='var(--pr)';$('#aErr').textContent='Link ya kubadili password imetumwa.'}catch(x){$('#aErr').style.color='';$('#aErr').textContent=aMsg(x)}};
-const logout=()=>{unlocked=false;try{localStorage.removeItem('contact_last')}catch(e){}if(auth)auth.signOut();else leave()};
+const logout=()=>{unlocked=false;if(auth)auth.signOut();else leave()};
 $('#outBtn').onclick=logout;$('#lOut').onclick=logout;
 
 let tok=0;
@@ -288,11 +287,10 @@ async function enter(u){
  const t=++tok;user=u;
  try{const d=await openDB('contact_'+u.uid);if(t!==tok){d.close();return}if(db)db.close();db=d;contacts=await dbAll()}
  catch(e){$('#boot').textContent='Hifadhi ya kivinjari (IndexedDB) haipatikani. Jaribu kivinjari kingine.';return}
- if(!u.offline){try{localStorage.setItem('contact_last',JSON.stringify({uid:u.uid,email:u.email}))}catch(e){}}
  const lk=await getM('lock');if(t!==tok)return;
  $('#boot').classList.add('hide');$('#auth').classList.add('hide');
- if(lk&&!unlocked)showLock();
- $('#app').classList.remove('hide');if(!lk||unlocked)render();startSync(u,t)}
+ if(!lk){unlocked=false;showSetup()}else if(!unlocked)showLock();
+ $('#app').classList.remove('hide');if(unlocked)render();startSync(u,t)}
 function leave(){tok++;stopSync();if(db){db.close();db=null}contacts=[];user=null;unlocked=false;
  $('#boot').classList.add('hide');$('#app').classList.add('hide');$('#lock').classList.add('hide');$('#auth').classList.remove('hide')}
 
@@ -344,9 +342,16 @@ function startSync(u,t){
 window.addEventListener('online',()=>{if(canCloud()&&!unsub)startSync(user,tok)});
 
 /* ---------- Lock ---------- */
-let fails=0;
-function showLock(){$('#list').innerHTML='';$('#lReset').classList.add('hide');$('#lRpass').value='';$('#lPass').value='';$('#lErr').textContent='';$('#lock').classList.remove('hide');setTimeout(()=>$('#lPass').focus(),50)}
-$('#lockForm').onsubmit=async e=>{e.preventDefault();const l=await getM('lock');
+let fails=0,setupMode=false;
+function showLock(){setupMode=false;$('#lTitle').textContent='Contact imefungwa';$('#lSub').textContent='Weka password ya Contact kuendelea';$('#lPass2').classList.add('hide');$('#lPass2').value='';$('#lForgot').classList.remove('hide');$('#lPass').placeholder='Password ya Contact';
+ $('#list').innerHTML='';$('#lReset').classList.add('hide');$('#lRpass').value='';$('#lPass').value='';$('#lErr').textContent='';$('#lock').classList.remove('hide');setTimeout(()=>$('#lPass').focus(),50)}
+function showSetup(){showLock();setupMode=true;$('#lTitle').textContent='Weka password ya Contact';$('#lSub').textContent='Ni lazima. Itaombwa kila ukifungua Contact (angalau herufi 4)';$('#lPass').placeholder='Password mpya';$('#lPass2').classList.remove('hide');$('#lForgot').classList.add('hide')}
+$('#lockForm').onsubmit=async e=>{e.preventDefault();
+ if(setupMode){const a=$('#lPass').value,b=$('#lPass2').value;
+  if(a.length<4){$('#lErr').textContent='Password iwe angalau herufi 4.';return}
+  if(a!==b){$('#lErr').textContent='Password hazilingani.';return}
+  const salt=uid()+uid();await setM('lock',{v:2,salt,hash:await hash(a,salt,2)});unlocked=true;setupMode=false;$('#lock').classList.add('hide');render();toast('Password imewekwa');return}
+ const l=await getM('lock');
  const pi=$('#lPass');
  if(l&&await hash(pi.value,l.salt,l.v)===l.hash){unlocked=true;fails=0;$('#lock').classList.add('hide');render()}
  else{fails++;$('#lErr').textContent='Password si sahihi.';pi.disabled=true;await new Promise(r=>setTimeout(r,Math.min(fails,6)*500));pi.disabled=false;pi.value='';pi.focus()}};
@@ -360,7 +365,7 @@ $('#lRgo').onclick=async()=>{
  try{const pw=user.providerData.some(p=>p.providerId==='password');
   if(pw)await user.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(user.email,$('#lRpass').value));
   else await user.reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider());
-  await delM('lock');unlocked=true;$('#lock').classList.add('hide');render();toast('Password ya Contact imeondolewa. Weka mpya kwenye Mipangilio.')}
+  await delM('lock');unlocked=false;showSetup();toast('Weka password mpya ya Contact')}
  catch(x){$('#lErr').textContent=aMsg(x)}};
 
 /* ---------- List ---------- */
@@ -487,13 +492,12 @@ $('#expBtn').onclick=()=>{
 /* ---------- Settings ---------- */
 async function openSettings(){
  const l=await getM('lock');$('#sUser').textContent=user?.email||'';$('#sPass').value='';$('#sErr').textContent='';
- $('#sLbl').textContent=l?'Password mpya ya Contact':'Password mpya';$('#sRemove').classList.toggle('hide',!l);
+ $('#sLbl').textContent='Password mpya ya Contact';
  $('#sStat').textContent=`Anwani: ${contacts.length} · ${$('#sync').textContent?$('#sync').textContent+' · ':''}Hamisha VCF mara kwa mara kuweka nakala`;
  $('#sDlg').showModal()}
 $('#settingsBtn').onclick=openSettings;
 $('#sSave').onclick=async()=>{const p=$('#sPass').value;if(p.length<4){$('#sErr').textContent='Password iwe angalau herufi 4.';return}
  const salt=uid()+uid();await setM('lock',{v:2,salt,hash:await hash(p,salt,2)});unlocked=true;$('#sDlg').close();toast('Password imewekwa')};
-$('#sRemove').onclick=async()=>{if(confirm('Ondoa password ya Contact?')){await delM('lock');$('#sDlg').close();toast('Password imeondolewa')}};
 $('#sWipe').onclick=async()=>{if(confirm('Futa anwani ZOTE? Hili haliwezi kurudishwa.')){cloudWipe(contacts.slice());await dbClear();contacts=[];render();$('#sDlg').close();toast('Anwani zote zimefutwa')}};
 
 let hid=0;
@@ -503,10 +507,11 @@ document.addEventListener('visibilitychange',async()=>{
  hid=0});
 
 (function boot(){
- if(auth){auth.onAuthStateChanged(u=>u?enter(u):leave());return}
- let last=null;try{last=JSON.parse(localStorage.getItem('contact_last'))}catch(e){}
- if(last&&last.uid)enter({uid:last.uid,email:last.email,providerData:[],offline:true});
- else{leave();$('#aErr').textContent='Hakuna mtandao: ingia mara ya kwanza ukiwa na intaneti.'}
+ if(auth){
+  // Hakuna session inayobaki: kila ukifungua lazima uingie upya
+  auth.setPersistence(firebase.auth.Auth.Persistence.NONE).catch(()=>{}).then(()=>auth.signOut()).catch(()=>{}).then(()=>auth.onAuthStateChanged(u=>u?enter(u):leave()));
+  return}
+ leave();$('#aErr').textContent='Hakuna mtandao: unahitaji intaneti kuingia.'
 })();
 </script>
 </body>
