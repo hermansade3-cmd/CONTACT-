@@ -211,7 +211,7 @@ dialog::backdrop{background:#0006}
 
   <div class="sec">
    <h4>🔒 Password ya Contact</h4>
-   <p class="muted">Unaiweka mwenyewe. Itaombwa kila unapofungua Contact, na pia baada ya kuiacha kwa dakika 3. Haihitaji mtandao.</p>
+   <p class="muted">Unaiweka mwenyewe. Itaombwa kila unapofungua Contact, na kila unapotoka kwenye app kisha ukarudi. Haihitaji mtandao.</p>
    <div id="sCurBox" class="hide"><label for="sCur">Password ya sasa</label><input id="sCur" type="password" autocomplete="current-password"></div>
    <label for="sPass" id="sLbl">Password mpya</label>
    <input id="sPass" type="password" autocomplete="new-password" placeholder="Angalau herufi 4">
@@ -286,7 +286,6 @@ const $ = s => document.querySelector(s);
 const E = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let db, contacts = [], cur = null, filter = 'all', q = '', photo = '', editing = null,
     isSignup = false, unlocked = false, hasLock = false, cloudUser = null;
-const AUTOLOCK_MS = 3 * 60 * 1000;
 
 /* ---------- IndexedDB (hifadhi moja ya kifaa) ---------- */
 function openDB(n){return new Promise((ok,no)=>{const r=indexedDB.open(n,1);
@@ -388,11 +387,13 @@ $('#lRwipe').onclick=async()=>{
  await dbClear();contacts=[];await delM('lock');hasLock=false;openApp();toast('Data imefutwa. Unaweza kuanza upya.')};
 
 /* kufunga kiotomatiki baada ya kuacha app */
-let hid=0;
-document.addEventListener('visibilitychange',()=>{
- if(document.hidden){hid=Date.now();return}
- if(hid&&Date.now()-hid>AUTOLOCK_MS&&hasLock&&unlocked)showLock();
- hid=0});
+/* Funga papo hapo mtu anapotoka kwenye app (kubadili app/tab, kuzima skrini).
+   Isipokuwa anapochagua faili/picha (dirisha la kuchagua hufanya ukurasa ufichike kwa muda). */
+let pickAt=0;
+const picking=()=>{pickAt=Date.now()};
+function lockIfAway(){if(hasLock&&unlocked&&Date.now()-pickAt>60000)showLock()}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)lockIfAway()});
+window.addEventListener('pagehide',lockIfAway);
 
 /* ================= Akaunti ya wingu (hiari) ================= */
 const aMsg=e=>({'auth/invalid-credential':'Barua pepe au password si sahihi.','auth/wrong-password':'Password si sahihi.','auth/user-not-found':'Akaunti haipo.','auth/email-already-in-use':'Barua pepe hii tayari imesajiliwa.','auth/weak-password':'Password iwe angalau herufi 6.','auth/network-request-failed':'Hakuna mtandao.','auth/unauthorized-domain':'Domain hii haijaruhusiwa kwenye Firebase (Authorized domains).','auth/too-many-requests':'Majaribio mengi. Jaribu baadaye.','auth/invalid-email':'Barua pepe si sahihi.','auth/user-disabled':'Akaunti hii imezimwa.','auth/operation-not-allowed':'Njia hii ya kuingia haijawashwa kwenye Firebase.','auth/requires-recent-login':'Ingia tena kisha ujaribu.'}[e&&e.code]||(e&&e.message)||'Hitilafu');
@@ -538,7 +539,7 @@ function rowEl(kind,t,v){const d=document.createElement('div');d.className='rw';
 const addRow=(k,t,v)=>$(k==='ph'?'#fPh':'#fEm').appendChild(rowEl(k,t,v));
 $('#addPh').onclick=()=>addRow('ph','Simu','');$('#addEm').onclick=()=>addRow('em','Binafsi','');
 function setPhoto(p){photo=p;$('#fAv').innerHTML=photo?`<img class="av big" src="${E(photo)}" alt="">`:`<div class="av big" style="background:var(--bg2);color:var(--tx2)">👤</div>`;$('#phDel').classList.toggle('hide',!photo)}
-$('#phBtn').onclick=()=>$('#photoIn').click();$('#phDel').onclick=()=>setPhoto('');
+$('#phBtn').onclick=()=>{picking();$('#photoIn').click()};$('#phDel').onclick=()=>setPhoto('');
 $('#photoIn').onchange=e=>{const f=e.target.files[0];e.target.value='';if(!f)return;const u=URL.createObjectURL(f),im=new Image();
  im.onload=()=>{URL.revokeObjectURL(u);const s=256,r=Math.min(1,s/Math.min(im.width,im.height)),cv=document.createElement('canvas');
   cv.width=Math.round(im.width*r);cv.height=Math.round(im.height*r);cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);setPhoto(cv.toDataURL('image/jpeg',.82))};
@@ -559,7 +560,7 @@ $('#fForm').onsubmit=async e=>{e.preventDefault();
  $('#fDlg').close();render();toast('Imehifadhiwa')};
 
 /* ================= VCF ingiza / hamisha ================= */
-$('#impBtn').onclick=()=>{$('#side').classList.remove('open');$('#file').click()};
+$('#impBtn').onclick=()=>{$('#side').classList.remove('open');picking();$('#file').click()};
 const ptype=p=>/CELL|MOBILE|VOICE/.test(p)&&!/WORK|HOME/.test(p)?'Simu':/WORK/.test(p)?'Kazi':/HOME/.test(p)?'Nyumbani':/CELL/.test(p)?'Simu':'Nyingine';
 const etype=p=>/WORK/.test(p)?'Kazi':/HOME|PERSONAL/.test(p)?'Binafsi':'Nyingine';
 function qp(s){try{const b=[];s.replace(/=([0-9A-F]{2})|([^=])/gi,(m,h,ch)=>{if(h)b.push(parseInt(h,16));else for(const x of new TextEncoder().encode(ch))b.push(x)});return new TextDecoder().decode(new Uint8Array(b))}catch{return s}}
