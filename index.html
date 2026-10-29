@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact</title>
+<meta name="theme-color" content="#0b57d0">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E👤%3C/text%3E%3C/svg%3E">
+<style>
+:root{--bg:#fff;--bg2:#f1f3f4;--sf:#f8fafd;--tx:#202124;--tx2:#5f6368;--bd:#dadce0;--pr:#0b57d0;--prbg:#d3e3fd;--dg:#d93025;color-scheme:light}
+@media(prefers-color-scheme:dark){:root{--bg:#1f1f1f;--bg2:#2d2e30;--sf:#171717;--tx:#e3e3e3;--tx2:#a8abaf;--bd:#444746;--pr:#a8c7fa;--prbg:#0842a0;--dg:#f28b82;color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font:14px/1.4 "Google Sans",Roboto,system-ui,sans-serif;background:var(--bg);color:var(--tx)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--pr);outline-offset:2px}
+.hide{display:none!important}
+.btn{padding:9px 20px;border-radius:20px;font-weight:500}
+.btn.p{background:var(--pr);color:var(--bg)}
+.btn.t{color:var(--pr)}.btn.t:hover{background:var(--prbg)}
+.btn.d{color:var(--dg)}
+.ib{width:40px;height:40px;border-radius:50%;font-size:20px;color:var(--tx2);display:grid;place-items:center}
+.ib:hover{background:var(--bg2)}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--bg)}
+textarea{resize:vertical;min-height:70px}
+label{display:block;color:var(--tx2);font-size:12px;margin:12px 0 4px}
+.err{color:var(--dg);min-height:20px;margin:8px 0}
+/* auth + lock */
+.ov{position:fixed;inset:0;background:var(--sf);display:grid;place-items:center;padding:16px;z-index:50}
+.card{background:var(--bg);border:1px solid var(--bd);border-radius:28px;padding:36px 32px;width:100%;max-width:400px;text-align:center}
+.card h1{font-size:24px;font-weight:400;margin:8px 0 4px}
+.card p{color:var(--tx2);margin:0 0 16px}
+.card input{margin-bottom:10px;text-align:left}
+.card .btn{width:100%;margin-top:6px}
+.logo{width:56px;height:56px;border-radius:16px;background:var(--pr);color:var(--bg);display:inline-grid;place-items:center;font-size:30px}
+.lnk{color:var(--pr);margin-top:12px;display:inline-block}
+.or{color:var(--tx2);margin:12px 0 4px;font-size:12px}
+/* app */
+#app{display:grid;grid-template-columns:256px 1fr;grid-template-rows:64px 1fr;height:100%;background:var(--sf)}
+header{grid-column:1/3;display:flex;align-items:center;gap:8px;padding:0 12px}
+.brand{display:flex;align-items:center;gap:8px;font-size:22px;width:232px;color:var(--tx2)}
+.brand i{font-style:normal;width:32px;height:32px;border-radius:8px;background:var(--pr);color:var(--bg);display:grid;place-items:center;font-size:18px}
+.search{flex:1;max-width:720px;display:flex;align-items:center;background:var(--bg2);border-radius:24px;padding:0 8px}
+.search input{border:0;background:none;height:46px;padding:0 8px}
+.me{margin-left:auto}
+aside{padding:8px 12px;overflow:auto}
+.mk{display:flex;align-items:center;gap:12px;padding:16px 24px 16px 18px;border-radius:16px;background:var(--prbg);font-weight:500;margin:4px 0 16px;box-shadow:0 1px 3px #0003}
+.mk b{font-size:24px;font-weight:400}
+.nv{display:flex;align-items:center;gap:16px;width:100%;padding:0 20px;height:36px;border-radius:0 18px 18px 0;margin-left:-12px;padding-left:32px;text-align:left}
+.nv:hover{background:var(--bg2)}
+.nv.on{background:var(--prbg);font-weight:600}
+.nv span{width:20px;text-align:center}
+hr{border:0;border-top:1px solid var(--bd);margin:12px 0}
+main{background:var(--bg);border-radius:16px 0 0 0;overflow:auto;margin-right:0}
+.top{display:flex;justify-content:space-between;align-items:baseline;padding:16px 24px 8px;position:sticky;top:0;background:var(--bg);z-index:2}
+.top h2{margin:0;font-weight:400;font-size:22px}
+.top small{color:var(--tx2)}
+.ltr{padding:14px 24px 4px;color:var(--tx2);font-weight:600}
+.row{display:grid;grid-template-columns:48px 1.3fr 1.3fr 1fr 1fr 40px;align-items:center;gap:12px;padding:6px 24px;cursor:pointer;border-top:1px solid transparent}
+.row:hover{background:var(--bg2)}
+.row span{color:var(--tx2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row b{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nmc{min-width:0}.nmc b{display:block}.nmc small{display:none;color:var(--tx2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.star{font-size:18px;color:var(--tx2)}
+.av{width:36px;height:36px;border-radius:50%;object-fit:cover;color:#fff;display:grid;place-items:center;font-size:16px}
+.av.big{width:96px;height:96px;font-size:44px}
+.empty{padding:48px 24px;text-align:center;color:var(--tx2)}
+/* dialogs */
+dialog{border:0;border-radius:24px;padding:0;background:var(--bg);color:var(--tx);width:min(560px,100vw);max-width:100vw;margin:auto;max-height:92vh;box-shadow:0 8px 40px #0006}
+dialog::backdrop{background:#0006}
+.dh{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 0}
+.db{padding:8px 24px 20px}
+.df{display:flex;justify-content:flex-end;gap:8px;padding:12px 24px;border-top:1px solid var(--bd);position:sticky;bottom:0;background:var(--bg)}
+.hero{text-align:center;padding:8px 0 16px}
+.hero h3{font-size:24px;font-weight:400;margin:10px 0 2px}
+.hero p{margin:0;color:var(--tx2)}
+.acts{display:flex;justify-content:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.it{display:flex;gap:16px;padding:10px 0;align-items:flex-start;border-top:1px solid var(--bd)}
+.it span:first-child{width:24px;color:var(--tx2)}
+.it small{display:block;color:var(--tx2)}
+.it a{color:var(--pr);text-decoration:none}
+.rw{display:grid;grid-template-columns:110px 1fr 36px;gap:8px;margin-bottom:8px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ph{display:flex;align-items:center;gap:16px;margin-bottom:4px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#323232;color:#fff;padding:12px 20px;border-radius:8px;z-index:99;opacity:0;pointer-events:none;transition:.2s}
+#toast.on{opacity:1}
+.fab{display:none}
+@media(max-width:820px){
+ #app{grid-template-columns:1fr}
+ header{grid-column:1}
+ .brand span{display:none}.brand{width:auto}
+ aside{position:fixed;left:0;top:64px;bottom:0;width:270px;background:var(--sf);z-index:20;transform:translateX(-100%);transition:.2s;box-shadow:4px 0 16px #0003}
+ aside.open{transform:none}
+ main{border-radius:16px 16px 0 0}
+ .row{grid-template-columns:48px 1fr 40px}
+ .row>span{display:none}
+ .nmc small{display:block}
+ .mk{display:none}
+ .fab{display:grid;position:fixed;right:16px;bottom:20px;width:56px;height:56px;border-radius:16px;background:var(--prbg);font-size:30px;place-items:center;box-shadow:0 2px 8px #0005;z-index:5}
+ .g2{grid-template-columns:1fr}
+ dialog{max-width:none;margin:0;max-height:100dvh;height:100dvh;border-radius:0}
+}
+</style>
+</head>
+<body>
+
+<div id="boot" class="ov" style="z-index:60;color:var(--tx2)">Inapakia…</div>
+
+<!-- LOGIN -->
+<div id="auth" class="ov hide">
+ <form class="card" id="authForm">
+  <div class="logo">👤</div>
+  <h1 id="aTitle">Ingia kwenye Contact</h1>
+  <p>Anwani zako, salama kwenye kifaa chako</p>
+  <input id="aEmail" type="email" placeholder="Barua pepe" autocomplete="email" required>
+  <input id="aPass" type="password" placeholder="Password" autocomplete="current-password" required minlength="6">
+  <div class="err" id="aErr"></div>
+  <button class="btn p" id="aGo" type="submit">Ingia</button>
+  <div class="or">au</div>
+  <button class="btn t" id="aGoogle" type="button" style="border:1px solid var(--bd)">Endelea na Google</button><br>
+  <button class="lnk" id="aSwitch" type="button">Huna akaunti? Jisajili</button><br>
+  <button class="lnk" id="aReset" type="button">Umesahau password?</button>
+ </form>
+</div>
+
+<!-- APP LOCK -->
+<div id="lock" class="ov hide">
+ <form class="card" id="lockForm">
+  <div class="logo">🔒</div>
+  <h1>Contact imefungwa</h1>
+  <p>Weka password ya Contact kuendelea</p>
+  <input id="lPass" type="password" placeholder="Password ya Contact" autocomplete="off">
+  <div class="err" id="lErr"></div>
+  <button class="btn p" type="submit">Fungua</button>
+  <button class="lnk" id="lOut" type="button">Toka kwenye akaunti</button><br>
+  <button class="lnk" id="lForgot" type="button">Umesahau password ya Contact?</button>
+  <div id="lReset" class="hide"><p style="margin-top:12px">Thibitisha kuwa ni wewe ili kuondoa password ya Contact.</p><input id="lRpass" type="password" placeholder="Password ya akaunti" autocomplete="current-password"><button class="btn t" id="lRgo" type="button" style="border:1px solid var(--bd)">Thibitisha</button></div>
+ </form>
+</div>
+
+<!-- APP -->
+<div id="app" class="hide">
+ <header>
+  <button class="ib" id="menu" aria-label="Menyu">☰</button>
+  <div class="brand"><i>👤</i><span>Contact</span></div>
+  <div class="search"><span>🔍</span><input id="q" type="search" placeholder="Tafuta jina, namba au email"></div>
+  <button class="ib me" id="settingsBtn" aria-label="Mipangilio">⚙</button>
+ </header>
+ <aside id="side">
+  <button class="mk" id="newBtn"><b>＋</b> Unda mwasiliani</button>
+  <button class="nv on" data-f="all"><span>👥</span>Anwani</button>
+  <button class="nv" data-f="fav"><span>★</span>Vipendwa</button>
+  <hr>
+  <button class="nv" id="impBtn"><span>⬆</span>Ingiza (VCF)</button>
+  <button class="nv" id="expBtn"><span>⬇</span>Hamisha (VCF)</button>
+  <hr>
+  <button class="nv" id="lockNow"><span>🔒</span>Funga sasa</button>
+  <button class="nv" id="outBtn"><span>⎋</span>Toka</button>
+ </aside>
+ <main>
+  <div class="top"><h2 id="title">Anwani</h2><small><span id="count"></span> · <span id="sync"></span></small></div>
+  <div id="list"></div>
+ </main>
+ <button class="fab" id="fab" aria-label="Unda mwasiliani">＋</button>
+</div>
+<input type="file" id="file" multiple class="hide">
+<input type="file" id="photoIn" accept="image/*" class="hide">
+
+<!-- DETAIL -->
+<dialog id="dDlg">
+ <div class="dh"><button class="ib" data-close aria-label="Funga">✕</button><span><button class="ib" id="dFav" style="display:inline-grid">☆</button><button class="ib" id="dEdit" style="display:inline-grid" aria-label="Hariri">✎</button><button class="ib" id="dDel" style="display:inline-grid" aria-label="Futa">🗑</button></span></div>
+ <div class="db" id="dv"></div>
+</dialog>
+
+<!-- FORM -->
+<dialog id="fDlg">
+ <form id="fForm" method="dialog">
+  <div class="dh"><b style="font-size:18px;font-weight:400;padding-left:8px" id="fTitle">Mwasiliani mpya</b><button class="ib" type="button" data-close aria-label="Funga">✕</button></div>
+  <div class="db">
+   <div class="ph"><div id="fAv"></div><button class="btn t" type="button" id="phBtn">Weka picha</button><button class="btn t" type="button" id="phDel">Ondoa</button></div>
+   <div class="g2"><div><label for="fFirst">Jina la kwanza</label><input id="fFirst"></div><div><label for="fLast">Jina la mwisho</label><input id="fLast"></div></div>
+   <div class="g2"><div><label for="fCo">Kampuni / Taasisi</label><input id="fCo"></div><div><label for="fTitle2">Cheo</label><input id="fTitle2"></div></div>
+   <label>Namba za simu</label><div id="fPh"></div><button class="btn t" type="button" id="addPh">＋ Ongeza namba</button>
+   <label>Barua pepe</label><div id="fEm"></div><button class="btn t" type="button" id="addEm">＋ Ongeza email</button>
+   <label for="fAddr">Anwani / Makazi</label><input id="fAddr">
+   <div class="g2"><div><label for="fBday">Siku ya kuzaliwa</label><input id="fBday" type="date"></div><div><label for="fWeb">Tovuti</label><input id="fWeb" type="text" inputmode="url" placeholder="www.mfano.co.tz"></div></div>
+   <label for="fNotes">Maelezo</label><textarea id="fNotes"></textarea>
+  </div>
+  <div class="df"><button class="btn t" type="button" data-close>Ghairi</button><button class="btn p" type="submit">Hifadhi</button></div>
+ </form>
+</dialog>
+
+<!-- SETTINGS -->
+<dialog id="sDlg">
+ <div class="dh"><b style="font-size:18px;font-weight:400;padding-left:8px">Mipangilio</b><button class="ib" data-close aria-label="Funga">✕</button></div>
+ <div class="db">
+  <p id="sUser" style="color:var(--tx2)"></p>
+  <b>Password ya Contact (si lazima)</b>
+  <p style="color:var(--tx2);margin:4px 0">Ukiiweka, itaombwa kila ukifungua Contact. Ukiisahau, unaweza kuiondoa kwa kuthibitisha password ya akaunti yako (inahitaji mtandao).</p>
+  <label id="sLbl">Password mpya</label>
+  <input id="sPass" type="password" autocomplete="new-password" placeholder="Angalau herufi 4">
+  <div class="err" id="sErr"></div>
+  <button class="btn p" id="sSave">Hifadhi password</button>
+  <button class="btn d hide" id="sRemove">Ondoa password</button>
+  <hr>
+  <b>Takwimu</b>
+  <p id="sStat" style="color:var(--tx2);margin:4px 0"></p>
+  <button class="btn d" id="sWipe">Futa anwani zote</button>
+ </div>
+</dialog>
+
+<div id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDh05C50ezVo6Msus1sh7sfxXoV0ORbVMk",
+  authDomain: "smschat-af3e5.firebaseapp.com",
+  projectId: "smschat-af3e5",
+  storageBucket: "smschat-af3e5.firebasestorage.app",
+  messagingSenderId: "259144985126",
+  appId: "1:259144985126:web:b4be607c6a4e5836e614e7",
+  measurementId: "G-7RRE3Q7E81"
+};
+let auth = null, fs = null;
+try { firebase.initializeApp(firebaseConfig); auth = firebase.auth(); } catch (e) { console.warn('Firebase haipatikani', e); }
+try { if (auth) { fs = firebase.firestore(); fs.settings({ ignoreUndefinedProperties: true }); fs.enablePersistence({ synchronizeTabs: true }).catch(() => {}); } } catch (e) { console.warn('Firestore haipatikani', e); fs = null; }
+
+const $ = s => document.querySelector(s);
+const E = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let db, contacts = [], cur = null, filter = 'all', q = '', photo = '', editing = null, isSignup = false, unlocked = false, user = null;
+
+/* ---------- IndexedDB ---------- */
+function openDB(n){return new Promise((ok,no)=>{const r=indexedDB.open(n,1);
+ r.onupgradeneeded=()=>{r.result.createObjectStore('contacts',{keyPath:'id'});r.result.createObjectStore('meta')};
+ r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})}
+const st=(n,m='readonly')=>db.transaction(n,m).objectStore(n);
+const rq=r=>new Promise((ok,no)=>{r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});
+const dbAll=()=>rq(st('contacts').getAll());
+const dbPut=c=>rq(st('contacts','readwrite').put(c));
+const dbDel=id=>rq(st('contacts','readwrite').delete(id));
+const getM=k=>rq(st('meta').get(k));
+const setM=(k,v)=>rq(st('meta','readwrite').put(v,k));
+const delM=k=>rq(st('meta','readwrite').delete(k));
+function dbBulk(list){return new Promise((ok,no)=>{const t=db.transaction('contacts','readwrite');const s=t.objectStore('contacts');list.forEach(c=>s.put(c));t.oncomplete=ok;t.onerror=()=>no(t.error)})}
+function dbClear(){return rq(st('contacts','readwrite').clear())}
+
+/* ---------- Helpers ---------- */
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+const nm=c=>[c.first,c.last].filter(Boolean).join(' ')||c.company||c.phones[0]?.v||c.emails[0]?.v||'(Bila jina)';
+const cols=['#1a73e8','#d93025','#188038','#e37400','#9334e6','#007b83','#c2185b','#5f6368'];
+const colr=s=>cols[[...s].reduce((a,c)=>a+c.charCodeAt(0),0)%cols.length];
+const av=(c,cl='')=>c.photo?`<img class="av ${cl}" src="${E(c.photo)}" alt="">`:`<div class="av ${cl}" style="background:${colr(nm(c))}">${E(ini(nm(c)))}</div>`;
+const COL=new Intl.Collator(undefined,{sensitivity:'base',numeric:true});
+const ini=s=>(Array.from(String(s))[0]||'?').toUpperCase();
+const digits=s=>String(s).replace(/\D/g,'');
+const safeUrl=u=>/^https?:\/\//i.test(u)?u:(/^[\w-]+(\.[\w-]+)+(\/|$)/.test(u)?'https://'+u:'');
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),2800)}
+const hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+async function hash(p,s,v){const en=new TextEncoder();
+ if(v===2){const k=await crypto.subtle.importKey('raw',en.encode(p),'PBKDF2',false,['deriveBits']);return hex(await crypto.subtle.deriveBits({name:'PBKDF2',salt:en.encode(s),iterations:150000,hash:'SHA-256'},k,256))}
+ return hex(await crypto.subtle.digest('SHA-256',en.encode(s+p)))}
+const PT=['Simu','Kazi','Nyumbani','Nyingine'], ET=['Binafsi','Kazi','Nyingine'];
+
+/* ---------- Auth ---------- */
+function authMode(s){isSignup=s;$('#aTitle').textContent=s?'Fungua akaunti':'Ingia kwenye Contact';$('#aGo').textContent=s?'Jisajili':'Ingia';$('#aSwitch').textContent=s?'Tayari una akaunti? Ingia':'Huna akaunti? Jisajili';$('#aPass').autocomplete=s?'new-password':'current-password'}
+const aMsg=e=>({'auth/invalid-credential':'Barua pepe au password si sahihi.','auth/wrong-password':'Password si sahihi.','auth/user-not-found':'Akaunti haipo.','auth/email-already-in-use':'Barua pepe hii tayari imesajiliwa.','auth/weak-password':'Password iwe angalau herufi 6.','auth/network-request-failed':'Hakuna mtandao.','auth/unauthorized-domain':'Domain hii haijaruhusiwa kwenye Firebase (Authorized domains).','auth/too-many-requests':'Majaribio mengi. Jaribu baadaye.','auth/invalid-email':'Barua pepe si sahihi.','auth/user-disabled':'Akaunti hii imezimwa.','auth/operation-not-allowed':'Njia hii ya kuingia haijawashwa kwenye Firebase.'}[e.code]||e.message);
+$('#aSwitch').onclick=()=>authMode(!isSignup);
+if(auth)auth.getRedirectResult().catch(x=>{$('#aErr').textContent=aMsg(x)});
+$('#authForm').onsubmit=async e=>{e.preventDefault();$('#aErr').style.color='';$('#aErr').textContent='';if(!auth){$('#aErr').textContent='Hakuna mtandao. Jaribu tena.';return}
+ const gb=$('#aGo');gb.disabled=true;
+ try{const f=isSignup?auth.createUserWithEmailAndPassword:auth.signInWithEmailAndPassword;await f.call(auth,$('#aEmail').value.trim(),$('#aPass').value)}catch(x){$('#aErr').textContent=aMsg(x)}finally{gb.disabled=false}};
+$('#aGoogle').onclick=async()=>{const er=$('#aErr');er.style.color='';er.textContent='';if(!auth){er.textContent='Hakuna mtandao. Jaribu tena.';return}
+ const p=new firebase.auth.GoogleAuthProvider();
+ try{await auth.signInWithPopup(p)}catch(x){
+  if(['auth/popup-blocked','auth/operation-not-supported-in-this-environment'].includes(x.code)){try{await auth.signInWithRedirect(p)}catch(y){er.textContent=aMsg(y)}}
+  else if(!['auth/popup-closed-by-user','auth/cancelled-popup-request'].includes(x.code))er.textContent=aMsg(x)}};
+$('#aReset').onclick=async()=>{const m=$('#aEmail').value.trim();if(!m){$('#aErr').textContent='Andika barua pepe kwanza.';return}
+ try{await auth.sendPasswordResetEmail(m);$('#aErr').style.color='var(--pr)';$('#aErr').textContent='Link ya kubadili password imetumwa.'}catch(x){$('#aErr').style.color='';$('#aErr').textContent=aMsg(x)}};
+const logout=()=>{unlocked=false;try{localStorage.removeItem('contact_last')}catch(e){}if(auth)auth.signOut();else leave()};
+$('#outBtn').onclick=logout;$('#lOut').onclick=logout;
+
+let tok=0;
+async function enter(u){
+ const t=++tok;user=u;
+ try{const d=await openDB('contact_'+u.uid);if(t!==tok){d.close();return}if(db)db.close();db=d;contacts=await dbAll()}
+ catch(e){$('#boot').textContent='Hifadhi ya kivinjari (IndexedDB) haipatikani. Jaribu kivinjari kingine.';return}
+ if(!u.offline){try{localStorage.setItem('contact_last',JSON.stringify({uid:u.uid,email:u.email}))}catch(e){}}
+ const lk=await getM('lock');if(t!==tok)return;
+ $('#boot').classList.add('hide');$('#auth').classList.add('hide');
+ if(lk&&!unlocked)showLock();
+ $('#app').classList.remove('hide');if(!lk||unlocked)render();startSync(u,t)}
+function leave(){tok++;stopSync();if(db){db.close();db=null}contacts=[];user=null;unlocked=false;
+ $('#boot').classList.add('hide');$('#app').classList.add('hide');$('#lock').classList.add('hide');$('#auth').classList.remove('hide')}
+
+/* ---------- Cloud sync (Firestore) ---------- */
+let unsub=null,reconciled=false,syncMsg='';
+const SY={ok:'☁ Imesawazishwa',wait:'☁ Inasubiri mtandao',err:'⚠ Haisawazishi',off:'Kifaa hiki tu',on:'☁ Inasawazisha…'};
+function setSync(k,msg){const e=$('#sync');if(e){e.textContent=SY[k]||'';e.title=msg||''}syncMsg=msg||''}
+const canCloud=()=>!!(fs&&user&&!user.offline);
+const cdoc=id=>fs.collection('users').doc(user.uid).collection('contacts').doc(id);
+const norm=(r,id)=>({id:r.id||id,first:r.first||'',last:r.last||'',company:r.company||'',title:r.title||'',phones:Array.isArray(r.phones)?r.phones:[],emails:Array.isArray(r.emails)?r.emails:[],address:r.address||'',bday:r.bday||'',web:r.web||'',notes:r.notes||'',photo:r.photo||'',fav:!!r.fav,created:r.created||0,updated:r.updated||0});
+function cloudErr(e){
+ if(e&&e.code==='permission-denied'){setSync('err','Ruhusa imekataliwa. Weka Firestore Rules kwenye Firebase Console.');toast('Haisawazishi: weka Firestore Rules kwenye Firebase Console')}
+ else if(e&&e.code==='unavailable')setSync('wait','Hakuna mtandao');
+ else setSync('err',(e&&e.message)||'Hitilafu')}
+function cloudPut(c){if(!canCloud())return;const r={...c};if(JSON.stringify(r).length>900000)r.photo='';cdoc(c.id).set(r).catch(cloudErr)}
+function cloudDel(id){if(!canCloud())return;cdoc(id).set({id,deleted:true,updated:Date.now()}).catch(cloudErr)}
+async function cloudBatch(list,mk){if(!canCloud()||!list.length)return;
+ try{for(let i=0;i<list.length;i+=400){const b=fs.batch();list.slice(i,i+400).forEach(c=>b.set(cdoc(c.id),mk(c)));await b.commit()}}catch(e){cloudErr(e)}}
+const cloudBulk=list=>cloudBatch(list,c=>{const r={...c};if(JSON.stringify(r).length>900000)r.photo='';return r});
+const cloudWipe=list=>cloudBatch(list,c=>({id:c.id,deleted:true,updated:Date.now()}));
+function stopSync(){if(unsub){unsub();unsub=null}reconciled=false}
+function startSync(u,t){
+ stopSync();
+ if(!fs||u.offline){setSync('off');return}
+ setSync('on');
+ unsub=fs.collection('users').doc(u.uid).collection('contacts').onSnapshot(async snap=>{
+  if(t!==tok)return;
+  const loc=new Map(contacts.map(c=>[c.id,c])),put=[],del=[];
+  snap.docChanges().forEach(ch=>{
+   if(ch.type==='removed')return;
+   const r=ch.doc.data(),id=ch.doc.id,l=loc.get(id);
+   if(r.deleted){if(l)del.push(id);return}
+   if(!l||(r.updated||0)>(l.updated||0))put.push(norm(r,id))});
+  if(put.length||del.length){
+   try{if(put.length)await dbBulk(put);for(const id of del)await dbDel(id)}catch(e){console.warn(e)}
+   if(t!==tok)return;
+   const dm=new Set(del),pm=new Map(put.map(c=>[c.id,c]));
+   contacts=contacts.filter(c=>!dm.has(c.id)).map(c=>pm.get(c.id)||c);
+   for(const c of put)if(!loc.has(c.id))contacts.push(c);
+   if($('#lock').classList.contains('hide'))render()}
+  if(!reconciled&&!snap.metadata.fromCache){
+   reconciled=true;
+   const m=new Map();snap.docs.forEach(d=>m.set(d.id,d.data()));
+   const up=contacts.filter(c=>{const r=m.get(c.id);return !r||(c.updated||c.created||0)>(r.updated||0)});
+   up.forEach(c=>{if(!c.updated)c.updated=c.created||Date.now()});
+   if(up.length)cloudBulk(up)}
+  setSync(snap.metadata.fromCache||snap.metadata.hasPendingWrites?'wait':'ok')
+ },e=>cloudErr(e))}
+window.addEventListener('online',()=>{if(canCloud()&&!unsub)startSync(user,tok)});
+
+/* ---------- Lock ---------- */
+let fails=0;
+function showLock(){$('#list').innerHTML='';$('#lReset').classList.add('hide');$('#lRpass').value='';$('#lPass').value='';$('#lErr').textContent='';$('#lock').classList.remove('hide');setTimeout(()=>$('#lPass').focus(),50)}
+$('#lockForm').onsubmit=async e=>{e.preventDefault();const l=await getM('lock');
+ const pi=$('#lPass');
+ if(l&&await hash(pi.value,l.salt,l.v)===l.hash){unlocked=true;fails=0;$('#lock').classList.add('hide');render()}
+ else{fails++;$('#lErr').textContent='Password si sahihi.';pi.disabled=true;await new Promise(r=>setTimeout(r,Math.min(fails,6)*500));pi.disabled=false;pi.value='';pi.focus()}};
+$('#lockNow').onclick=async()=>{$('#side').classList.remove('open');if(await getM('lock')){unlocked=false;showLock()}else{toast('Weka password kwanza kwenye Mipangilio');openSettings()}};
+$('#lForgot').onclick=()=>{
+ if(!auth||!user||user.offline){$('#lErr').textContent='Unahitaji mtandao ili kuthibitisha akaunti.';return}
+ const pw=user.providerData.some(p=>p.providerId==='password');
+ $('#lReset').classList.remove('hide');$('#lRpass').classList.toggle('hide',!pw);$('#lRgo').textContent=pw?'Thibitisha na password ya akaunti':'Thibitisha na Google'};
+$('#lRpass').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();$('#lRgo').click()}};
+$('#lRgo').onclick=async()=>{
+ try{const pw=user.providerData.some(p=>p.providerId==='password');
+  if(pw)await user.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(user.email,$('#lRpass').value));
+  else await user.reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider());
+  await delM('lock');unlocked=true;$('#lock').classList.add('hide');render();toast('Password ya Contact imeondolewa. Weka mpya kwenye Mipangilio.')}
+ catch(x){$('#lErr').textContent=aMsg(x)}};
+
+/* ---------- List ---------- */
+function render(){
+ const l=contacts.filter(c=>(filter!=='fav'||c.fav)&&(!q||(nm(c)+' '+(c.company||'')+' '+c.phones.map(p=>p.v).join(' ')+' '+c.emails.map(e=>e.v).join(' ')).toLowerCase().includes(q)||(/^[\d\s+()-]+$/.test(q)&&digits(q)&&c.phones.some(p=>digits(p.v).includes(digits(q))))));
+ l.sort((a,b)=>COL.compare(nm(a),nm(b)));
+ $('#count').textContent=l.length+' '+(l.length===1?'mwasiliani':'wawasiliani');
+ let h='',L='';
+ for(const c of l){const f0=ini(nm(c)),ch=/\p{L}/u.test(f0)?f0:'#';if(ch!==L){L=ch;h+=`<div class="ltr">${E(ch)}</div>`}
+  h+=`<div class="row" role="button" data-id="${E(c.id)}" tabindex="0">${av(c)}<div class="nmc"><b>${E(nm(c))}</b><small>${E(c.phones[0]?.v||c.emails[0]?.v||'')}</small></div><span>${E(c.emails[0]?.v||'')}</span><span>${E(c.phones[0]?.v||'')}</span><span>${E(c.company)}</span><button class="star" data-fav="${c.id}" aria-label="Kipendwa">${c.fav?'★':'☆'}</button></div>`}
+ $('#list').innerHTML=h||`<p class="empty">${q?'Hakuna aliyepatikana.':filter==='fav'?'Hakuna vipendwa bado.':'Hakuna anwani bado. Bonyeza “Unda mwasiliani” au ingiza faili la VCF.'}</p>`;
+}
+$('#list').onclick=async e=>{
+ const f=e.target.closest('[data-fav]');if(f){const c=contacts.find(x=>x.id===f.dataset.fav);c.fav=!c.fav;c.updated=Date.now();await dbPut(c);cloudPut(c);render();return}
+ const r=e.target.closest('.row');if(r)showDetail(r.dataset.id)};
+let qt;$('#q').oninput=e=>{clearTimeout(qt);const v=e.target.value;qt=setTimeout(()=>{q=v.trim().toLowerCase();render()},120)};
+$('#list').onkeydown=e=>{if(e.key==='Enter'&&e.target.classList.contains('row'))showDetail(e.target.dataset.id)};
+$('main').onclick=()=>$('#side').classList.remove('open');
+['#dDlg','#sDlg'].forEach(s=>$(s).addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.close()}));
+document.querySelectorAll('.nv[data-f]').forEach(b=>b.onclick=()=>{filter=b.dataset.f;document.querySelectorAll('.nv[data-f]').forEach(x=>x.classList.toggle('on',x===b));$('#title').textContent=filter==='fav'?'Vipendwa':'Anwani';$('#side').classList.remove('open');render()});
+$('#menu').onclick=()=>$('#side').classList.toggle('open');
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('dialog').close());
+
+/* ---------- Detail ---------- */
+function showDetail(id){
+ const c=contacts.find(x=>x.id===id);if(!c)return;cur=c;
+ const it=(i,body)=>`<div class="it"><span>${i}</span><div>${body}</div></div>`;
+ let h=`<div class="hero">${av(c,'big')}<h3>${E(nm(c))}</h3><p>${E([c.title,c.company].filter(Boolean).join(', '))}</p>
+ <div class="acts">${c.phones[0]?`<a class="btn t" style="border:1px solid var(--bd);text-decoration:none" href="tel:${E(c.phones[0].v)}">📞 Piga</a><a class="btn t" style="border:1px solid var(--bd);text-decoration:none" href="sms:${E(c.phones[0].v)}">💬 SMS</a>`:''}${c.emails[0]?`<a class="btn t" style="border:1px solid var(--bd);text-decoration:none" href="mailto:${E(c.emails[0].v)}">✉ Email</a>`:''}</div></div>`;
+ c.phones.forEach(p=>h+=it('📞',`<a href="tel:${E(p.v)}">${E(p.v)}</a><small>${E(p.t)}</small>`));
+ c.emails.forEach(p=>h+=it('✉',`<a href="mailto:${E(p.v)}">${E(p.v)}</a><small>${E(p.t)}</small>`));
+ if(c.address)h+=it('📍',E(c.address));
+ if(c.bday)h+=it('🎂',E(c.bday));
+ if(c.web)h+=it('🌐',safeUrl(c.web)?`<a href="${E(safeUrl(c.web))}" target="_blank" rel="noopener">${E(c.web)}</a>`:E(c.web));
+ if(c.notes)h+=it('📝',E(c.notes).replace(/\n/g,'<br>'));
+ $('#dv').innerHTML=h;$('#dFav').textContent=c.fav?'★':'☆';$('#dDlg').showModal()}
+$('#dFav').onclick=async()=>{cur.fav=!cur.fav;cur.updated=Date.now();await dbPut(cur);cloudPut(cur);$('#dFav').textContent=cur.fav?'★':'☆';render()};
+$('#dEdit').onclick=()=>{$('#dDlg').close();openForm(cur)};
+$('#dDel').onclick=async()=>{if(confirm(`Futa ${nm(cur)}?`)){await dbDel(cur.id);cloudDel(cur.id);contacts=contacts.filter(x=>x.id!==cur.id);$('#dDlg').close();render();toast('Imefutwa')}};
+
+/* ---------- Form ---------- */
+function rowEl(kind,t,v){const d=document.createElement('div');d.className='rw';const o=(kind==='ph'?PT:ET);
+ d.innerHTML=`<select>${o.map(x=>`<option${x===t?' selected':''}>${x}</option>`).join('')}</select><input type="${kind==='ph'?'tel':'email'}" value="${E(v||'')}" placeholder="${kind==='ph'?'Namba ya simu':'Barua pepe'}"><button type="button" class="ib" aria-label="Ondoa">✕</button>`;
+ d.querySelector('button').onclick=()=>d.remove();return d}
+const addRow=(k,t,v)=>$(k==='ph'?'#fPh':'#fEm').appendChild(rowEl(k,t,v));
+$('#addPh').onclick=()=>addRow('ph','Simu','');$('#addEm').onclick=()=>addRow('em','Binafsi','');
+function setPhoto(p){photo=p;$('#fAv').innerHTML=photo?`<img class="av big" src="${photo}" alt="">`:`<div class="av big" style="background:var(--bg2);color:var(--tx2)">👤</div>`;$('#phDel').classList.toggle('hide',!photo)}
+$('#phBtn').onclick=()=>$('#photoIn').click();$('#phDel').onclick=()=>setPhoto('');
+$('#photoIn').onchange=e=>{const f=e.target.files[0];e.target.value='';if(!f)return;const im=new Image();im.onload=()=>{URL.revokeObjectURL(im.src);const s=256,r=Math.min(1,s/Math.min(im.width,im.height)),cv=document.createElement('canvas');
+ cv.width=Math.round(im.width*r);cv.height=Math.round(im.height*r);cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);setPhoto(cv.toDataURL('image/jpeg',.82))};const u=URL.createObjectURL(f);im.onerror=()=>{URL.revokeObjectURL(u);toast('Picha haikufunguka')};im.src=u};
+function openForm(c){editing=c;$('#fTitle').textContent=c?'Hariri mwasiliani':'Mwasiliani mpya';
+ $('#fFirst').value=c?.first||'';$('#fLast').value=c?.last||'';$('#fCo').value=c?.company||'';$('#fTitle2').value=c?.title||'';
+ $('#fAddr').value=c?.address||'';$('#fBday').value=c?.bday||'';$('#fWeb').value=c?.web||'';$('#fNotes').value=c?.notes||'';
+ $('#fPh').innerHTML='';$('#fEm').innerHTML='';
+ (c?.phones.length?c.phones:[{t:'Simu',v:''}]).forEach(p=>addRow('ph',p.t,p.v));(c?.emails||[]).forEach(p=>addRow('em',p.t,p.v));
+ setPhoto(c?.photo||'');$('#fDlg').showModal();$('#fFirst').focus()}
+$('#newBtn').onclick=()=>{$('#side').classList.remove('open');openForm(null)};$('#fab').onclick=()=>openForm(null);
+const rows=id=>[...document.querySelectorAll(id+' .rw')].map(r=>({t:r.querySelector('select').value,v:r.querySelector('input').value.trim()})).filter(x=>x.v);
+$('#fForm').onsubmit=async e=>{e.preventDefault();
+ const c={...(editing||{id:uid(),fav:false,created:Date.now()}),first:$('#fFirst').value.trim(),last:$('#fLast').value.trim(),company:$('#fCo').value.trim(),title:$('#fTitle2').value.trim(),
+  phones:rows('#fPh'),emails:rows('#fEm'),address:$('#fAddr').value.trim(),bday:$('#fBday').value,web:$('#fWeb').value.trim(),notes:$('#fNotes').value.trim(),photo,updated:Date.now()};
+ if(!c.first&&!c.last&&!c.company&&!c.phones.length&&!c.emails.length){toast('Weka angalau jina au namba');return}
+ await dbPut(c);cloudPut(c);const i=contacts.findIndex(x=>x.id===c.id);i>=0?contacts[i]=c:contacts.push(c);
+ $('#fDlg').close();render();toast('Imehifadhiwa')};
+
+/* ---------- VCF import / export ---------- */
+$('#impBtn').onclick=()=>{$('#side').classList.remove('open');$('#file').click()};
+const ptype=p=>/CELL|MOBILE|VOICE/.test(p)&&!/WORK|HOME/.test(p)?'Simu':/WORK/.test(p)?'Kazi':/HOME/.test(p)?'Nyumbani':/CELL/.test(p)?'Simu':'Nyingine';
+const etype=p=>/WORK/.test(p)?'Kazi':/HOME|PERSONAL/.test(p)?'Binafsi':'Nyingine';
+function qp(s){try{const b=[];s.replace(/=([0-9A-F]{2})|([^=])/gi,(m,h,ch)=>{if(h)b.push(parseInt(h,16));else for(const x of new TextEncoder().encode(ch))b.push(x)});return new TextDecoder().decode(new Uint8Array(b))}catch{return s}}
+const unesc=s=>s.replace(/\\n/gi,'\n').replace(/\\([,;\\])/g,'$1');
+function parseVCF(t){
+ t=t.replace(/\r\n?/g,'\n').replace(/\n[ \t]/g,'');
+ const out=[];
+ for(const blk of t.split(/BEGIN:VCARD/i).slice(1)){
+  const c={id:uid(),first:'',last:'',company:'',title:'',phones:[],emails:[],address:'',bday:'',web:'',notes:'',photo:'',fav:false,created:Date.now(),updated:Date.now()};let fn='';
+  const L0=blk.split('\n');
+  for(let k=0;k<L0.length;k++){let ln=L0[k];
+   while(/QUOTED-PRINTABLE/i.test(ln.split(':')[0])&&ln.endsWith('=')&&k+1<L0.length)ln=ln.slice(0,-1)+L0[++k];
+   const i=ln.indexOf(':');if(i<1)continue;
+   const left=ln.slice(0,i),P=left.toUpperCase(),n=P.split(';')[0].split('.').pop();let v=ln.slice(i+1);
+   if(/QUOTED-PRINTABLE/.test(P))v=qp(v);
+   switch(n){
+    case 'N':{const p=v.split(';').map(unesc);c.last=(p[0]||'').trim();c.first=[p[1],p[2]].filter(Boolean).join(' ').trim();break}
+    case 'FN':fn=unesc(v).trim();break;
+    case 'ORG':c.company=unesc(v.split(';')[0]).trim();break;
+    case 'TITLE':c.title=unesc(v).trim();break;
+    case 'TEL':if(v.trim())c.phones.push({t:ptype(P),v:v.replace(/^tel:/i,'').trim()});break;
+    case 'EMAIL':if(v.trim())c.emails.push({t:etype(P),v:v.trim()});break;
+    case 'ADR':c.address=v.split(';').map(unesc).filter(Boolean).join(', ');break;
+    case 'BDAY':{const m=v.replace(/-/g,'').match(/^(\d{4})(\d{2})(\d{2})/);if(m)c.bday=`${m[1]}-${m[2]}-${m[3]}`;break}
+    case 'URL':c.web=v.trim();break;
+    case 'NOTE':c.notes=unesc(v).trim();break;
+    case 'X-FAVORITE':case 'X-STARRED':c.fav=/1|true|yes/i.test(v);break;
+    case 'PHOTO':{if(/^data:image\//i.test(v))c.photo=v.trim();else if(/ENCODING=B|BASE64|VALUE=BINARY/.test(P)||/^[A-Za-z0-9+\/=]{100,}$/.test(v)){const ty=(P.match(/(?:TYPE=|;)(JPEG|JPG|PNG|GIF)/)||[])[1]||'JPEG';c.photo=`data:image/${ty.toLowerCase().replace('jpg','jpeg')};base64,${v.trim()}`}break}
+   }
+  }
+  if(c.photo&&!/^data:image\/(png|jpe?g|gif|webp);base64,[A-Za-z0-9+\/=]+$/i.test(c.photo))c.photo='';
+  if(!c.first&&!c.last&&fn){const p=fn.split(' ');c.first=p.shift();c.last=p.join(' ')}
+  if(c.first||c.last||c.company||c.phones.length||c.emails.length)out.push(c)}
+ return out}
+$('#file').onchange=async e=>{const fs=[...e.target.files];e.target.value='';if(!fs.length)return;
+ let all=[];for(const f of fs)all=all.concat(parseVCF(await f.text()));
+ if(!all.length){toast('Hakuna anwani zilizopatikana kwenye faili hilo');return}
+ const key=c=>nm(c).toLowerCase()+'|'+digits(c.phones[0]?.v||c.emails[0]?.v||'');
+ const have=new Set(contacts.map(key));const add=[];
+ for(const c of all){const k=key(c);if(!have.has(k)){have.add(k);add.push(c)}}
+ if(add.length){await dbBulk(add);cloudBulk(add);contacts=contacts.concat(add);render()}
+ toast(`Zimeingizwa ${add.length}`+(all.length-add.length?`, zilizojirudia ${all.length-add.length} zimerukwa`:''))};
+const ve=s=>String(s||'').replace(/([,;\\])/g,'\\$1').replace(/\n/g,'\\n');
+const pt=t=>({Simu:'CELL',Kazi:'WORK',Nyumbani:'HOME'}[t]||'VOICE'), et=t=>({Kazi:'WORK',Binafsi:'HOME'}[t]||'INTERNET');
+$('#expBtn').onclick=()=>{
+ if(!contacts.length){toast('Hakuna anwani za kuhamisha');return}
+ const o=contacts.map(c=>{const l=['BEGIN:VCARD','VERSION:3.0',`N:${ve(c.last)};${ve(c.first)};;;`,`FN:${ve(nm(c))}`];
+  if(c.company)l.push('ORG:'+ve(c.company));if(c.title)l.push('TITLE:'+ve(c.title));
+  c.phones.forEach(p=>l.push(`TEL;TYPE=${pt(p.t)}:${p.v}`));c.emails.forEach(p=>l.push(`EMAIL;TYPE=${et(p.t)}:${p.v}`));
+  if(c.address)l.push('ADR;TYPE=HOME:;;'+ve(c.address)+';;;;');if(c.bday)l.push('BDAY:'+c.bday);if(c.web)l.push('URL:'+c.web);if(c.notes)l.push('NOTE:'+ve(c.notes));
+  const pm=(c.photo||'').match(/^data:image\/(\w+);base64,(.+)$/);
+  if(pm)l.push(('PHOTO;ENCODING=b;TYPE='+pm[1].toUpperCase()+':'+pm[2]).replace(/(.{75})/g,'$1\r\n ').replace(/\r\n $/,''));
+  if(c.fav)l.push('X-FAVORITE:1');
+  l.push('END:VCARD');return l.join('\r\n')}).join('\r\n')+'\r\n';
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([o],{type:'text/vcard'}));a.download='contacts.vcf';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);toast('Imehamishwa: contacts.vcf')};
+
+/* ---------- Settings ---------- */
+async function openSettings(){
+ const l=await getM('lock');$('#sUser').textContent=user?.email||'';$('#sPass').value='';$('#sErr').textContent='';
+ $('#sLbl').textContent=l?'Password mpya ya Contact':'Password mpya';$('#sRemove').classList.toggle('hide',!l);
+ $('#sStat').textContent=`Anwani: ${contacts.length} · ${$('#sync').textContent?$('#sync').textContent+' · ':''}Hamisha VCF mara kwa mara kuweka nakala`;
+ $('#sDlg').showModal()}
+$('#settingsBtn').onclick=openSettings;
+$('#sSave').onclick=async()=>{const p=$('#sPass').value;if(p.length<4){$('#sErr').textContent='Password iwe angalau herufi 4.';return}
+ const salt=uid()+uid();await setM('lock',{v:2,salt,hash:await hash(p,salt,2)});unlocked=true;$('#sDlg').close();toast('Password imewekwa')};
+$('#sRemove').onclick=async()=>{if(confirm('Ondoa password ya Contact?')){await delM('lock');$('#sDlg').close();toast('Password imeondolewa')}};
+$('#sWipe').onclick=async()=>{if(confirm('Futa anwani ZOTE? Hili haliwezi kurudishwa.')){cloudWipe(contacts.slice());await dbClear();contacts=[];render();$('#sDlg').close();toast('Anwani zote zimefutwa')}};
+
+let hid=0;
+document.addEventListener('visibilitychange',async()=>{
+ if(document.hidden){hid=Date.now();return}
+ if(hid&&Date.now()-hid>3*60*1000&&db&&!$('#app').classList.contains('hide')&&await getM('lock')){unlocked=false;showLock()}
+ hid=0});
+
+(function boot(){
+ if(auth){auth.onAuthStateChanged(u=>u?enter(u):leave());return}
+ let last=null;try{last=JSON.parse(localStorage.getItem('contact_last'))}catch(e){}
+ if(last&&last.uid)enter({uid:last.uid,email:last.email,providerData:[],offline:true});
+ else{leave();$('#aErr').textContent='Hakuna mtandao: ingia mara ya kwanza ukiwa na intaneti.'}
+})();
+</script>
+</body>
+</html>
